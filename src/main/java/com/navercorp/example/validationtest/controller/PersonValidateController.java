@@ -1,10 +1,15 @@
 package com.navercorp.example.validationtest.controller;
 
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +27,12 @@ public class PersonValidateController {
 	private static final Logger logger = LoggerFactory.getLogger(PersonValidateController.class);
 
 	private final PersonValidator personValidator;
+	private final MessageSource messageSource;
 
 	@Autowired
-	public PersonValidateController(PersonValidator personValidator) {
+	public PersonValidateController(PersonValidator personValidator, MessageSource messageSource) {
 		this.personValidator = personValidator;
+		this.messageSource = messageSource;
 	}
 
 	@InitBinder
@@ -41,6 +48,7 @@ public class PersonValidateController {
 		logger.debug("validate directly. {}", person);
 
 		personValidator.validate(person, result);
+
 		return !result.hasErrors();
 	}
 
@@ -52,5 +60,24 @@ public class PersonValidateController {
 		logger.debug("validate automatically. {}", person);
 
 		return !result.hasErrors();
+	}
+
+	/**
+	 * @return person 객체의 검증 후 에러 메시지들
+	 */
+	@GetMapping("validate/get-error-messages")
+	public List<String> validateAndGetErrorMessages(@RequestBody Person person, BindingResult result) {
+		logger.debug("validated. {}", person);
+
+		personValidator.validate(person, result);
+
+		return result.getAllErrors().stream()
+									.map(error -> messageSource.getMessage(error.getCode(), null, Locale.getDefault()))
+									.collect(Collectors.toList());
+	}
+
+	@GetMapping("validate")
+	public void noBindingResultValidatePerson(@RequestBody @Valid Person person) {
+		logger.debug("validated. {}", person);
 	}
 }

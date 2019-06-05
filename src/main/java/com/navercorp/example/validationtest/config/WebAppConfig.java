@@ -1,7 +1,10 @@
 package com.navercorp.example.validationtest.config;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
@@ -13,4 +16,12 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.navercorp.example.validationtest"})
 public class WebAppConfig {
+	@Bean
+	public MessageSource messageSource() {
+		ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
+		resourceBundleMessageSource.setBasename("messages");
+		resourceBundleMessageSource.setDefaultEncoding("UTF-8");
+
+		return resourceBundleMessageSource;
+	}
 }

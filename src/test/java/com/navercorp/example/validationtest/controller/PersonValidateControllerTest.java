@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -24,12 +25,14 @@ import com.navercorp.example.validationtest.validator.PersonValidator;
 public class PersonValidateControllerTest {
 	@Autowired
 	private PersonValidator personValidator;
+	@Autowired
+	private MessageSource messageSource;
 
 	private MockMvc mockMvc;
 
 	@Before
 	public void setUp() {
-		this.mockMvc = MockMvcBuilders.standaloneSetup(new PersonValidateController(personValidator)).build();
+		this.mockMvc = MockMvcBuilders.standaloneSetup(new PersonValidateController(personValidator, messageSource)).build();
 	}
 
 	@Test
@@ -108,5 +111,23 @@ public class PersonValidateControllerTest {
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(content().string("false"));
+	}
+
+	@Test
+	public void noBindingResultValidateTest() throws Exception {
+		this.mockMvc.perform(get("/person/validate")
+							.content("{\"name\":\"test\", \"age\":\"-1\"}")
+							.contentType("application/json; charset=UTF-8"))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void validateAndGetBindingResultTest() throws Exception {
+		this.mockMvc.perform(get("/person/validate/get-error-messages")
+							.content("{\"name\":\"\", \"age\":\"99\"}")
+							.contentType("application/json; charset=UTF-8"))
+			.andDo(print())
+			.andExpect(status().isOk());
 	}
 }
