@@ -71,8 +71,8 @@ public class PersonValidateController {
 
 		personValidator.validate(person, result);
 
-		return result.getAllErrors().stream()
-									.map(error -> messageSource.getMessage(error.getCode(), null, Locale.getDefault()))
+		return result.getFieldErrors().stream()
+									.map(error -> messageSource.getMessage(error, Locale.getDefault()))
 									.collect(Collectors.toList());
 	}
 
