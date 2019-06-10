@@ -1,4 +1,4 @@
-package com.navercorp.example.validationtest.controller;
+package com.navercorp.example.validationtest.controller.person;
 
 import java.util.List;
 import java.util.Locale;

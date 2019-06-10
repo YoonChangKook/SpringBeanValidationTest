@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.navercorp.example.validationtest.config.ValidatorConfig;
 import com.navercorp.example.validationtest.config.WebAppConfig;
+import com.navercorp.example.validationtest.controller.person.PersonValidateController;
 import com.navercorp.example.validationtest.validator.PersonValidator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
