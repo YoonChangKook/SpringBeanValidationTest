@@ -14,7 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,7 +44,7 @@ public class PersonValidateController {
 	 * @return person 객체의 검증 성공 여부
 	 */
 	@GetMapping("validate/directly")
-	public boolean directlyValidatePerson(@RequestBody Person person, BindingResult result) {
+	public boolean directlyValidatePerson(@ModelAttribute Person person, BindingResult result) {
 		logger.debug("validate directly. {}", person);
 
 		personValidator.validate(person, result);
@@ -56,7 +56,7 @@ public class PersonValidateController {
 	 * @return person 객체의 검증 성공 여부
 	 */
 	@GetMapping("validate/automatically")
-	public boolean automaticallyValidatePerson(@RequestBody @Valid Person person, BindingResult result) {
+	public boolean automaticallyValidatePerson(@ModelAttribute @Valid Person person, BindingResult result) {
 		logger.debug("validate automatically. {}", person);
 
 		return !result.hasErrors();
@@ -66,7 +66,7 @@ public class PersonValidateController {
 	 * @return person 객체의 검증 후 에러 메시지들
 	 */
 	@GetMapping("validate/get-error-messages")
-	public List<String> validateAndGetErrorMessages(@RequestBody Person person, BindingResult result) {
+	public List<String> validateAndGetErrorMessages(@ModelAttribute Person person, BindingResult result) {
 		logger.debug("validated. {}", person);
 
 		personValidator.validate(person, result);
@@ -77,7 +77,7 @@ public class PersonValidateController {
 	}
 
 	@GetMapping("validate")
-	public void noBindingResultValidatePerson(@RequestBody @Valid Person person) {
+	public void noBindingResultValidatePerson(@ModelAttribute @Valid Person person) {
 		logger.debug("validated. {}", person);
 	}
 }

@@ -39,8 +39,8 @@ public class PersonValidateControllerTest {
 	@Test
 	public void directlyValidateTest() throws Exception {
 		this.mockMvc.perform(get("/person/validate/directly")
-							.content("{\"name\":\"kook\", \"age\":\"28\"}")
-							.contentType("application/json; charset=UTF-8"))
+							.param("name", "kook")
+							.param("age", "28"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(content().string("true"));
@@ -49,8 +49,8 @@ public class PersonValidateControllerTest {
 	@Test
 	public void directlyValidateEmptyNameTest() throws Exception {
 		this.mockMvc.perform(get("/person/validate/directly")
-							.content("{\"name\":\"\", \"age\":\"25\"}")
-							.contentType("application/json; charset=UTF-8"))
+							.param("name", "")
+							.param("age", "25"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(content().string("false"));
@@ -60,16 +60,16 @@ public class PersonValidateControllerTest {
 	public void directlyValidateWrongAgeTest() throws Exception {
 		// 음수 나이
 		this.mockMvc.perform(get("/person/validate/directly")
-							.content("{\"name\":\"test\", \"age\":\"-1\"}")
-							.contentType("application/json; charset=UTF-8"))
+							.param("name", "test")
+							.param("age", "-1"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(content().string("false"));
 
 		// 100살을 초과하는 나이
 		this.mockMvc.perform(get("/person/validate/directly")
-							.content("{\"name\":\"test\", \"age\":\"101\"}")
-							.contentType("application/json; charset=UTF-8"))
+							.param("name", "test")
+							.param("age", "101"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(content().string("false"));
@@ -78,8 +78,8 @@ public class PersonValidateControllerTest {
 	@Test
 	public void automaticallyValidateTest() throws Exception {
 		this.mockMvc.perform(get("/person/validate/automatically")
-							.content("{\"name\":\"kook\", \"age\":\"28\"}")
-							.contentType("application/json; charset=UTF-8"))
+							.param("name", "kook")
+							.param("age", "28"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(content().string("true"));
@@ -88,8 +88,8 @@ public class PersonValidateControllerTest {
 	@Test
 	public void automaticallyValidateEmptyNameTest() throws Exception {
 		this.mockMvc.perform(get("/person/validate/automatically")
-							.content("{\"name\":\"\", \"age\":\"72\"}")
-							.contentType("application/json; charset=UTF-8"))
+							.param("name", "")
+							.param("age", "72"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(content().string("false"));
@@ -99,16 +99,16 @@ public class PersonValidateControllerTest {
 	public void automaticallyValidateWrongAgeTest() throws Exception {
 		// 음수 나이
 		this.mockMvc.perform(get("/person/validate/automatically")
-							.content("{\"name\":\"test\", \"age\":\"-1\"}")
-							.contentType("application/json; charset=UTF-8"))
+							.param("name", "test")
+							.param("age", "-1"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(content().string("false"));
 
 		// 100살을 초과하는 나이
 		this.mockMvc.perform(get("/person/validate/automatically")
-							.content("{\"name\":\"test\", \"age\":\"101\"}")
-							.contentType("application/json; charset=UTF-8"))
+							.param("name", "test")
+							.param("age", "101"))
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(content().string("false"));
@@ -117,8 +117,8 @@ public class PersonValidateControllerTest {
 	@Test
 	public void noBindingResultValidateTest() throws Exception {
 		this.mockMvc.perform(get("/person/validate")
-							.content("{\"name\":\"test\", \"age\":\"-1\"}")
-							.contentType("application/json; charset=UTF-8"))
+							.param("name", "test")
+							.param("age", "-1"))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}
@@ -126,8 +126,8 @@ public class PersonValidateControllerTest {
 	@Test
 	public void validateAndGetBindingResultTest() throws Exception {
 		this.mockMvc.perform(get("/person/validate/get-error-messages")
-							.content("{\"name\":\"\", \"age\":\"99\"}")
-							.contentType("application/json; charset=UTF-8"))
+							.param("name", "")
+							.param("age", "99"))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}

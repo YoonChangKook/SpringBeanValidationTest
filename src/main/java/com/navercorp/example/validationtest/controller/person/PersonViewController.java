@@ -7,11 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.navercorp.example.validationtest.domain.Person;
 import com.navercorp.example.validationtest.validator.PersonValidator;
 
 @Controller
+@RequestMapping("person")
 public class PersonViewController {
 	private static final Logger logger = LoggerFactory.getLogger(PersonViewController.class);
 
@@ -22,7 +24,7 @@ public class PersonViewController {
 		this.personValidator = personValidator;
 	}
 
-	@GetMapping("/person/form")
+	@GetMapping("form")
 	public String personForm(@ModelAttribute Person person, BindingResult result) {
 		logger.debug("person form: {}", person);
 
