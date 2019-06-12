@@ -1,11 +1,14 @@
 package com.navercorp.example.validationtest.controller.person;
 
+import java.util.Locale;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -24,10 +27,12 @@ public class CarValidateController {
 	private static final Logger logger = LoggerFactory.getLogger(CarValidateController.class);
 
 	private final Validator validator;
+	private final MessageSource messageSource;
 
 	@Autowired
-	public CarValidateController(@Qualifier("jsrValidator") Validator validator) {
+	public CarValidateController(@Qualifier("jsrValidator") Validator validator, MessageSource messageSource) {
 		this.validator = validator;
+		this.messageSource = messageSource;
 	}
 
 	/**
@@ -59,6 +64,6 @@ public class CarValidateController {
 	@ExceptionHandler({BindException.class})
 	public ResponseEntity<String> paramViolationError(BindException ex) {
 		logger.error(ex.getMessage());
-		return ResponseEntity.badRequest().body(ex.getFieldError().getDefaultMessage());
+		return ResponseEntity.badRequest().body(messageSource.getMessage(ex.getFieldError(), Locale.getDefault()));
 	}
 }
