@@ -1,4 +1,4 @@
-package com.navercorp.example.validationtest.controller.person;
+package com.navercorp.example.validationtest.controller.car;
 
 import java.util.Locale;
 

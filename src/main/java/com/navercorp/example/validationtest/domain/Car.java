@@ -4,8 +4,11 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Range;
 
+import com.navercorp.example.validationtest.validator.LowercaseAlphabets;
+
 public class Car {
 	@NotBlank(message = "The manufacturer must not be empty.")
+	@LowercaseAlphabets
 	private String manufacturer;
 
 	@Range(min = 0, max = 10, message = "The seat count must be between 0 ~ 10")

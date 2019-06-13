@@ -19,7 +19,7 @@ import org.springframework.validation.Validator;
 
 import com.navercorp.example.validationtest.config.ValidatorConfig;
 import com.navercorp.example.validationtest.config.WebAppConfig;
-import com.navercorp.example.validationtest.controller.person.CarValidateController;
+import com.navercorp.example.validationtest.controller.car.CarValidateController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -48,6 +48,49 @@ public class CarValidateControllerTest {
 			.andDo(print())
 			.andExpect(status().isOk())
 			.andExpect(content().string("true"));
+	}
+
+	@Test
+	public void directlyValidatInvalidParamTest() throws Exception {
+		// invalid speed
+		this.mockMvc.perform(get("/car/validate/directly")
+							.characterEncoding("utf-8")
+							.param("manufacturer", "kook")
+							.param("seatCount", "4")
+							.param("topSpeed", "301"))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(content().string("false"));
+
+		// invalid seat count
+		this.mockMvc.perform(get("/car/validate/directly")
+							.characterEncoding("utf-8")
+							.param("manufacturer", "kook")
+							.param("seatCount", "-1")
+							.param("topSpeed", "200"))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(content().string("false"));
+
+		// invalid manufacturer
+		this.mockMvc.perform(get("/car/validate/directly")
+							.characterEncoding("utf-8")
+							.param("manufacturer", "")
+							.param("seatCount", "4")
+							.param("topSpeed", "200"))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(content().string("false"));
+
+		// not lowercase alphabet manufacturer
+		this.mockMvc.perform(get("/car/validate/directly")
+							.characterEncoding("utf-8")
+							.param("manufacturer", "AbCd")
+							.param("seatCount", "4")
+							.param("topSpeed", "200"))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(content().string("false"));
 	}
 
 	@Test
@@ -86,6 +129,15 @@ public class CarValidateControllerTest {
 		this.mockMvc.perform(get("/car/validate/automatically")
 							.characterEncoding("utf-8")
 							.param("manufacturer", "")
+							.param("seatCount", "4")
+							.param("topSpeed", "200"))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+
+		// not lowercase alphabet manufacturer
+		this.mockMvc.perform(get("/car/validate/automatically")
+							.characterEncoding("utf-8")
+							.param("manufacturer", "AbCd")
 							.param("seatCount", "4")
 							.param("topSpeed", "200"))
 			.andDo(print())
